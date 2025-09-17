@@ -131,7 +131,9 @@ jobs:
     
     - name: Test Docker image
       run: |
-        docker run -d -p 8000:8000 --name test-container ${{ env.REGISTRY }}/sanjaysk43/sample-python-api:${{ github.sha }}
+        # Extract the first tag from the metadata output
+        IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
+        docker run -d -p 8000:8000 --name test-container $IMAGE_TAG
         sleep 10
         curl -f http://localhost:8000/health || exit 1
         docker stop test-container
