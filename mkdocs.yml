@@ -1,0 +1,16 @@
+site_name: 'Sample Python API'
+site_description: 'A demonstration Python FastAPI application for Backstage'
+
+nav:
+  - Home: index.md
+
+plugins:
+  - techdocs-core
+
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+  - pymdownx.superfences

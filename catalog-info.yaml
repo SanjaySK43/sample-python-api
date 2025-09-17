@@ -1,0 +1,60 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sample-python-api
+  title: Sample Python FastAPI Service
+  description: Example Python FastAPI application created from template
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: SanjaySK43/sample-python-api
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '8000'
+    prometheus.io/path: '/metrics'
+  tags:
+    - python
+    - fastapi
+    - api
+    - sample
+spec:
+  type: service
+  lifecycle: experimental
+  owner: developers
+  system: python-services
+  providesApis:
+    - sample-python-api-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: sample-python-api-api
+  description: Sample Python FastAPI REST API
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: developers
+  system: python-services
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: Sample Python API
+      description: A demonstration Python FastAPI application
+      version: 1.0.0
+    paths:
+      /:
+        get:
+          summary: Root endpoint
+          responses:
+            '200':
+              description: Welcome response
+      /health:
+        get:
+          summary: Health check
+          responses:
+            '200':
+              description: Health status
+      /metrics:
+        get:
+          summary: Metrics endpoint
+          responses:
+            '200':
+              description: Application metrics
