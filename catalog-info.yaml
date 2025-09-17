@@ -9,7 +9,7 @@ metadata:
     prometheus.io/rule: 'http_requests_total'
     prometheus.io/alert: 'sample-python-api'
     grafana/dashboard-selector: 'sample-python-api'
-    grafana/overview-dashboard: 'http://localhost:3001/d/sample-python-api/python-api-dashboard'
+    grafana/overview-dashboard: 'http://localhost:3001/d/b563cfc2-439d-45ee-94b5-8971e275e29b/python-api-metrics'
   tags:
     - python
     - fastapi
