@@ -6,9 +6,10 @@ metadata:
   annotations:
     backstage.io/techdocs-ref: dir:.
     github.com/project-slug: SanjaySK43/sample-python-api
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: '8000'
-    prometheus.io/path: '/metrics'
+    prometheus.io/rule: 'http_requests_total'
+    prometheus.io/alert: 'sample-python-api'
+    grafana/dashboard-selector: 'sample-python-api'
+    grafana/overview-dashboard: 'http://localhost:3001/d/sample-python-api/python-api-dashboard'
   tags:
     - python
     - fastapi
