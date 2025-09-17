@@ -76,7 +76,7 @@ jobs:
     
     - name: Check import sorting
       run: |
-        isort --check-only .
+        isort --check-only --profile black .
 
   build:
     needs: [test, lint]
