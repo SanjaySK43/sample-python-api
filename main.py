@@ -10,8 +10,9 @@ from datetime import datetime
 from typing import Any, Dict
 
 from fastapi import FastAPI, Request
-from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 from fastapi.responses import Response
+from prometheus_client import (CONTENT_TYPE_LATEST, Counter, Histogram,
+                               generate_latest)
 from pydantic import BaseModel
 
 # Application metadata
