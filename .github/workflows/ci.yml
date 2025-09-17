@@ -133,13 +133,28 @@ jobs:
       run: |
         # Extract the first tag from the metadata output
         IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
-        docker run -d -p 8000:8000 --name test-container $IMAGE_TAG
+        echo "Testing image: $IMAGE_TAG"
         
-        # Wait for container to be ready and get container IP
-        sleep 15
+        # Run container and capture container ID
+        CONTAINER_ID=$(docker run -d -p 8000:8000 $IMAGE_TAG)
+        echo "Container ID: $CONTAINER_ID"
         
-        # Check if container is running
-        docker ps | grep test-container
+        # Wait for container to start
+        sleep 10
+        
+        # Check container status and logs
+        echo "Container status:"
+        docker ps -a | grep $CONTAINER_ID
+        
+        echo "Container logs:"
+        docker logs $CONTAINER_ID
+        
+        # Check if container is still running
+        if ! docker ps | grep $CONTAINER_ID > /dev/null; then
+          echo "Container is not running, exiting..."
+          docker rm $CONTAINER_ID
+          exit 1
+        fi
         
         # Test health endpoint with retry logic
         for i in {1..5}; do
@@ -147,19 +162,21 @@ jobs:
             echo "Health check passed"
             break
           else
-            echo "Health check attempt $i failed, retrying in 5 seconds..."
-            sleep 5
+            echo "Health check attempt $i failed, retrying in 3 seconds..."
+            sleep 3
           fi
           if [ $i -eq 5 ]; then
             echo "Health check failed after 5 attempts"
-            docker logs test-container
+            docker logs $CONTAINER_ID
+            docker stop $CONTAINER_ID
+            docker rm $CONTAINER_ID
             exit 1
           fi
         done
         
         # Cleanup
-        docker stop test-container
-        docker rm test-container
+        docker stop $CONTAINER_ID
+        docker rm $CONTAINER_ID
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
