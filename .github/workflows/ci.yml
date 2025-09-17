@@ -115,7 +115,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ github.repository }}
+        images: ${{ env.REGISTRY }}/sanjaysk43/sample-python-api
         tags: |
           type=ref,event=branch
           type=ref,event=pr
@@ -131,7 +131,7 @@ jobs:
     
     - name: Test Docker image
       run: |
-        docker run -d -p 8000:8000 --name test-container ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+        docker run -d -p 8000:8000 --name test-container ${{ env.REGISTRY }}/sanjaysk43/sample-python-api:${{ github.sha }}
         sleep 10
         curl -f http://localhost:8000/health || exit 1
         docker stop test-container
