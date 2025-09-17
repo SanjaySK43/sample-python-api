@@ -2,14 +2,15 @@
 Test suite for the Sample Python API
 """
 
-import sys
 import os
+import sys
 
 # Add the parent directory to the path to import main
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pytest
 from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)
