@@ -2,8 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: sample-python-api
-  title: Sample Python FastAPI Service
-  description: Example Python FastAPI application created from template
+  description: Sample Python FastAPI service for Backstage integration
   annotations:
     backstage.io/techdocs-ref: dir:.
     github.com/project-slug: SanjaySK43/sample-python-api
