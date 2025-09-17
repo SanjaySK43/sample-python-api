@@ -5,7 +5,7 @@ WORKDIR /app
 # Copy requirements and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
-    cat requirements.txt && \
+    pip install --no-cache-dir prometheus-client==0.19.0 && \
     pip install --no-cache-dir -r requirements.txt && \
     pip list | grep prometheus
 
