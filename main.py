@@ -11,8 +11,7 @@ from typing import Any, Dict
 
 from fastapi import FastAPI, Request
 from fastapi.responses import Response
-from prometheus_client import (CONTENT_TYPE_LATEST, Counter, Histogram,
-                               generate_latest)
+from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
 from pydantic import BaseModel
 
 # Application metadata
