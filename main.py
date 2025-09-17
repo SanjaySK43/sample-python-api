@@ -23,6 +23,7 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+
 # Response models
 class HealthResponse(BaseModel):
     status: str
@@ -78,6 +79,7 @@ async def metrics() -> Dict[str, Any]:
         "uptime_seconds": 0,  # Placeholder - would track actual uptime
         "requests_total": 0,  # Placeholder - would track request count
     }
+
 
 if __name__ == "__main__":
     import uvicorn
