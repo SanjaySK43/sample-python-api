@@ -136,8 +136,13 @@ jobs:
         IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
         echo "Testing image: $IMAGE_TAG"
         
+        # Debug: Check what's installed in the image
+        echo "Checking installed packages..."
+        docker run --rm $IMAGE_TAG pip list
+        
         # Test container can start and run basic command
         echo "Testing container startup..."
+        docker run --rm $IMAGE_TAG python -c "import prometheus_client; print('prometheus_client imported successfully')"
         docker run --rm $IMAGE_TAG python -c "import main; print('Import successful')"
         
         # Run container in background

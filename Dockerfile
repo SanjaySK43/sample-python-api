@@ -2,9 +2,13 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# Copy requirements and install dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip list
 
+# Copy application code
 COPY main.py .
 
 EXPOSE 8000
