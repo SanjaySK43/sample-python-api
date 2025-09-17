@@ -5,8 +5,9 @@ WORKDIR /app
 # Copy requirements and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
+    cat requirements.txt && \
     pip install --no-cache-dir -r requirements.txt && \
-    pip list
+    pip list | grep prometheus
 
 # Copy application code
 COPY main.py .
