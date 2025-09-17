@@ -1,32 +1,61 @@
 # Sample Python FastAPI Service
 
-A demonstration Python FastAPI application integrated with Backstage.
+A demonstration Python FastAPI application showcasing Backstage integration with comprehensive monitoring, CI/CD, and documentation.
 
-## Features
+## 🚀 Features
 
-- FastAPI framework
-- Health check endpoints
-- Metrics for monitoring
-- Comprehensive test suite
-- CI/CD with GitHub Actions
-- Docker support
+- **FastAPI Framework**: Modern, fast web framework for building APIs
+- **Prometheus Metrics**: Built-in metrics collection and monitoring
+- **Grafana Dashboards**: Pre-configured dashboards for visualization
+- **Health Checks**: Kubernetes-ready health and readiness endpoints
+- **CI/CD Pipeline**: GitHub Actions with testing, linting, and deployment
+- **Docker Support**: Multi-stage builds with optimized images
+- **Backstage Integration**: Full catalog integration with TechDocs
 
-## Quick Start
+## 🏃 Quick Start
 
+### Local Development
 ```bash
 # Install dependencies
-pip install fastapi uvicorn
+pip install -r requirements.txt
 
 # Run the application
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-## API Endpoints
+### Docker Compose (with Monitoring)
+```bash
+# Start the full stack (API + Prometheus + Grafana)
+docker-compose up -d
+
+# Access services:
+# - API: http://localhost:8000
+# - Prometheus: http://localhost:9090
+# - Grafana: http://localhost:3001 (admin/admin)
+```
+
+## 📊 Monitoring & Observability
+
+### Prometheus Metrics
+- **HTTP Request Rate**: `rate(http_requests_total[5m])`
+- **Request Duration**: `http_request_duration_seconds`
+- **Application Info**: `app_info`
+
+### Grafana Dashboard
+Pre-configured dashboard includes:
+- Request rate by endpoint and method
+- Response time percentiles (50th, 95th)
+- Total request rate gauge
+- Error rate monitoring
+
+### API Endpoints
 
 - `GET /` - Welcome message
-- `GET /health` - Health check
-- `GET /metrics` - Application metrics
-- `GET /docs` - Interactive API documentation
+- `GET /health` - Health check endpoint
+- `GET /metrics` - Prometheus metrics (text format)
+- `GET /metrics/json` - JSON metrics for basic monitoring
+- `GET /docs` - Interactive API documentation (Swagger UI)
+- `GET /redoc` - Alternative API documentation (ReDoc)
 
 ## Testing
 

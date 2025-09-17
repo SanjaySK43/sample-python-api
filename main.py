@@ -5,14 +5,28 @@ A demonstration API showcasing FastAPI integration with Backstage.
 This serves as a reference implementation for Python services.
 """
 
+import time
 from datetime import datetime
 from typing import Any, Dict
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
+from fastapi.responses import Response
 from pydantic import BaseModel
 
 # Application metadata
 __version__ = "1.0.0"
+
+# Prometheus metrics
+REQUEST_COUNT = Counter(
+    "http_requests_total", "Total HTTP requests", ["method", "endpoint", "status_code"]
+)
+REQUEST_DURATION = Histogram(
+    "http_request_duration_seconds",
+    "HTTP request duration in seconds",
+    ["method", "endpoint"],
+)
+APP_INFO = Counter("app_info", "Application information", ["version", "name"])
 
 # FastAPI application instance
 app = FastAPI(
@@ -22,6 +36,30 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+# Initialize app info metric
+APP_INFO.labels(version=__version__, name="sample-python-api").inc(0)
+
+
+# Middleware for metrics collection
+@app.middleware("http")
+async def metrics_middleware(request: Request, call_next):
+    start_time = time.time()
+
+    response = await call_next(request)
+
+    # Record metrics
+    duration = time.time() - start_time
+    REQUEST_DURATION.labels(method=request.method, endpoint=request.url.path).observe(
+        duration
+    )
+    REQUEST_COUNT.labels(
+        method=request.method,
+        endpoint=request.url.path,
+        status_code=response.status_code,
+    ).inc()
+
+    return response
 
 
 # Response models
@@ -66,12 +104,23 @@ async def health_check() -> HealthResponse:
 
 
 @app.get("/metrics")
-async def metrics() -> Dict[str, Any]:
+async def get_metrics():
     """
-    Basic metrics endpoint for Prometheus monitoring.
+    Prometheus metrics endpoint.
 
     Returns:
-        Dict: Basic application metrics
+        Response: Prometheus formatted metrics
+    """
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
+
+
+@app.get("/metrics/json")
+async def get_metrics_json() -> Dict[str, Any]:
+    """
+    JSON metrics endpoint for basic monitoring.
+
+    Returns:
+        Dict: Basic application metrics in JSON format
     """
     return {
         "app_info": {"name": "sample-python-api", "version": __version__},

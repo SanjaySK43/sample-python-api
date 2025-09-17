@@ -36,9 +36,20 @@ def test_health_check():
     assert "timestamp" in data
 
 
-def test_metrics_endpoint():
-    """Test the metrics endpoint"""
+def test_prometheus_metrics_endpoint():
+    """Test the Prometheus metrics endpoint"""
     response = client.get("/metrics")
+    assert response.status_code == 200
+    assert "text/plain" in response.headers["content-type"]
+    # Check for Prometheus format
+    content = response.content.decode()
+    assert "http_requests_total" in content
+    assert "http_request_duration_seconds" in content
+
+
+def test_json_metrics_endpoint():
+    """Test the JSON metrics endpoint"""
+    response = client.get("/metrics/json")
     assert response.status_code == 200
     data = response.json()
     assert "app_info" in data
