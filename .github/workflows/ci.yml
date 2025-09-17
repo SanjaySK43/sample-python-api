@@ -134,8 +134,30 @@ jobs:
         # Extract the first tag from the metadata output
         IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
         docker run -d -p 8000:8000 --name test-container $IMAGE_TAG
-        sleep 10
-        curl -f http://localhost:8000/health || exit 1
+        
+        # Wait for container to be ready and get container IP
+        sleep 15
+        
+        # Check if container is running
+        docker ps | grep test-container
+        
+        # Test health endpoint with retry logic
+        for i in {1..5}; do
+          if curl -f http://localhost:8000/health; then
+            echo "Health check passed"
+            break
+          else
+            echo "Health check attempt $i failed, retrying in 5 seconds..."
+            sleep 5
+          fi
+          if [ $i -eq 5 ]; then
+            echo "Health check failed after 5 attempts"
+            docker logs test-container
+            exit 1
+          fi
+        done
+        
+        # Cleanup
         docker stop test-container
         docker rm test-container
 
