@@ -2,6 +2,9 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# Force cache bust with timestamp
+ARG CACHEBUST=1
+
 # Install dependencies directly
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir \
@@ -11,7 +14,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
         pytest==7.4.3 \
         httpx==0.25.2 \
         pytest-cov==4.1.0 && \
-    pip list
+    pip list && \
+    pip show prometheus-client
 
 # Copy application code
 COPY main.py .

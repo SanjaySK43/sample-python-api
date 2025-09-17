@@ -127,8 +127,11 @@ jobs:
         context: .
         push: true
         no-cache: true
+        pull: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          CACHEBUST=${{ github.run_number }}
     
     - name: Test Docker image
       run: |
